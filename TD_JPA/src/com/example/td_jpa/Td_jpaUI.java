@@ -195,6 +195,8 @@ public class Td_jpaUI extends UI {
 				});
 				
 				
+				
+				
 		layout2.addComponent((Component)idTextField);
 		layout2.addComponent(new Label(""));
 		layout2.addComponent((Component)buttonFindId);

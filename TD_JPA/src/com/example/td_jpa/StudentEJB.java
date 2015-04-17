@@ -63,6 +63,16 @@ public class StudentEJB implements StudentEJBRemote {
 		return query.getResultList();
 	}
 	
+	public Project createProject(Student s, String title) throws Exception {
+		Project p = new Project();
+		ProjectEJB e_p = new ProjectEJB();
+		p.setTitle(title);
+		p.setOwner(s.getStudentID());
+		e_p.createProject(p);
+		return p;
+		
+	}
+	
 	
 	
 }

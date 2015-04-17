@@ -43,7 +43,7 @@ public class Project implements Serializable {
 		return this.owner_id;
 	}
 
-	public void setOwner(int owner_id) {
+	public void setOwner(long owner_id) {
 		this.owner_id = owner_id;
 	}
    
