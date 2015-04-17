@@ -1,0 +1,9 @@
+@import "addons.scss";
+@import "td_jpa.scss";
+
+/* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
+/* The actual styles should be defined in td_jpa.scss */
+.td_jpa {
+  @include addons;
+  @include td_jpa;
+}
