@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+
+//Interface used by the class StudentEJB
+
 @Remote
 public interface StudentEJBRemote {
 	

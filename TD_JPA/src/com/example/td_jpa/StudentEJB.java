@@ -8,6 +8,10 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 
+/* 
+ Implementation class of Enterprise Java Bean class : StudentEJB
+ */
+
 public class StudentEJB implements StudentEJBRemote {
 
 	
@@ -17,12 +21,12 @@ public class StudentEJB implements StudentEJBRemote {
 	public StudentEJB() {
 	}
 	
-	
+	// Find a student in database thanks to his ID
 	public Student findStudentById(long id)  throws Exception {
 		return em.find(Student.class, id);
 	}
 
-	
+	// Create a student in database with in input an object of type Student
 	public Student createStudent(Student s)  throws Exception {
 		em.getTransaction().begin();
 		em.persist(s);
@@ -30,14 +34,14 @@ public class StudentEJB implements StudentEJBRemote {
 		return s;
 	}
 
-	
+	// Delete a student in database with in input an object of type Student 
 	public void deleteStudent(Student s)  throws Exception {
 		em.getTransaction().begin();
 		em.remove(s);
 		em.getTransaction().commit() ;
 	}
 
-	
+	// Update the fields of a student saved in database 
 	public Student updateStudent(Student s)  throws Exception  {
 		em.getTransaction().begin();
 		em.merge(s);
@@ -46,6 +50,7 @@ public class StudentEJB implements StudentEJBRemote {
 	}
 	
 	
+	// Find all students saved in database and return a List which contains all students
 	@SuppressWarnings("unchecked")
 	public List<Student> findStudents()  throws Exception {
 		em.getTransaction().begin();
@@ -54,6 +59,7 @@ public class StudentEJB implements StudentEJBRemote {
 		return query.getResultList();
 	}
 	
+	// Find all projects of a student saved in database and return a List which contains all these projects. This method takes in input the student's ID. 
 	@SuppressWarnings("unchecked")
 	public List<Project> findProjects(long id)  throws Exception {
 		em.getTransaction().begin();

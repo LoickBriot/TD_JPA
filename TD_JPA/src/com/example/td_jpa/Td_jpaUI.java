@@ -32,14 +32,11 @@ public class Td_jpaUI extends UI {
 	public static class Servlet extends VaadinServlet {
 	}
 	
-
-	
 	@Override
 	protected void init(VaadinRequest request) {
 		
 		StudentEJB e_s = new StudentEJB();
 		ProjectEJB e_p = new ProjectEJB();
-		
 		TextField nameTextField = new TextField("name");
 		TextField addressTextField = new TextField("address");
 		TextField ageTextField = new TextField("age");
@@ -54,10 +51,10 @@ public class Td_jpaUI extends UI {
 
 		
 		
-		// Layout 1
+		/* Implementation of Layout n°1 */
 		
 		
-		//Create a part for : Create a student 
+			//Create a student 
 		VerticalLayout layout1 = new VerticalLayout();		
 		Button buttonCreate = new Button("Create a Student");
 		buttonCreate.addClickListener(new Button.ClickListener() {
@@ -89,12 +86,12 @@ public class Td_jpaUI extends UI {
 		
 		
 		
-		// Layout 2
+		// Implementation of Layout n°2
 		
 		VerticalLayout layout2 = new VerticalLayout();
 		
 		
-		//Create a part for : Find a student by Id 
+			// Find a student by Id 
 		
 		Button buttonFindId = new Button("Find a Student by Id");
 		buttonFindId.addClickListener(new Button.ClickListener() {
@@ -119,83 +116,75 @@ public class Td_jpaUI extends UI {
 		
 		//Create a part for : Update a student 		
 				
-				Button buttonUpdate = new Button("Update a Student");
-				buttonUpdate.addClickListener(new Button.ClickListener() {
-					public void buttonClick(ClickEvent event) {
-					
-						try {
-							Student s = e_s.findStudentById(Integer.parseInt(idTextField.getValue()));
-							s.setName(nameTextField.getValue());
-							s.setAddress(addressTextField.getValue());
-							s.setAge(Integer.parseInt(ageTextField.getValue()));
-							e_s.updateStudent(s);
-							layout2.addComponent(new Label("A student has been updated"));
-						}
-						catch(Exception e) {
-							layout2.addComponent(new Label("Update ERROR"));
+		Button buttonUpdate = new Button("Update a Student");
+		buttonUpdate.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
 
-						}
+				try {
+					Student s = e_s.findStudentById(Integer.parseInt(idTextField.getValue()));
+					s.setName(nameTextField.getValue());
+					s.setAddress(addressTextField.getValue());
+					s.setAge(Integer.parseInt(ageTextField.getValue()));
+					e_s.updateStudent(s);
+					layout2.addComponent(new Label("A student has been updated"));
+				}
+				catch(Exception e) {
+					layout2.addComponent(new Label("Update ERROR"));
+
+				}
+			}
+		});
+
+
+
+		//Create a part for : Delete a student by Id
+
+		Button buttonDelete = new Button("Delete a Student");
+		buttonDelete.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				Student s = new Student();
+
+				try {
+					e_s.deleteStudent(e_s.findStudentById(Integer.parseInt(idTextField.getValue())));
+					List<Project> lproject = new ArrayList<Project>() ;
+					lproject=e_s.findProjects(Integer.parseInt(idTextField.getValue()));
+					for (Project pp : lproject){
+						e_p.deleteProject(pp);
 					}
-				});
-				
-				
-				
-				//Create a part for : Delete a student by Id
-				
-				Button buttonDelete = new Button("Delete a Student");
-				buttonDelete.addClickListener(new Button.ClickListener() {
-					public void buttonClick(ClickEvent event) {
-						Student s = new Student();
-												
-						try {
-							e_s.deleteStudent(e_s.findStudentById(Integer.parseInt(idTextField.getValue())));
-							List<Project> lproject = new ArrayList<Project>() ;
-							lproject=e_s.findProjects(Integer.parseInt(idTextField.getValue()));
-							for (Project pp : lproject){
-								e_p.deleteProject(pp);
-							}
-							//e_s.deleteStudent(e_s.findStudentById(Integer.parseInt(idTextField.getValue())));
-							//s = e_s.findStudentById(Integer.parseInt(idTextField.getValue()));
-							//lproject = e_s.findProjects(s.getStudentID());
-							//for (Project pp : lproject){
-								//e_p.deleteProject(pp);
-							//}
-							//e_s.deleteStudent(s);
-							layout2.addComponent(new Label("A student has been deleted"));
-						}
-						catch(Exception e) {
-							layout2.addComponent(new Label("Delete ERROR"));
-						}
-						
+					layout2.addComponent(new Label("A student has been deleted"));
+				}
+				catch(Exception e) {
+					layout2.addComponent(new Label("Delete ERROR"));
+				}
+
+			}
+		});
+
+
+		// find projects by ID student
+
+		Button buttonFindProjectS = new Button("Find Projects by ID Student");
+		buttonFindProjectS.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				Student s = new Student();
+				try {
+					s = e_s.findStudentById(Integer.parseInt(idTextField.getValue()));
+
+					List<Project> lproject = new ArrayList<Project>() ;
+					lproject=e_s.findProjects(s.getStudentID());
+					layout2.addComponent(new Label("Projects of student n° "+s.getStudentID()));
+					for (Project pp : lproject){
+						layout2.addComponent(new Label("\nID: " + pp.getProjectID() + "\n  | title: " + pp.getTitle() + "\n  | owner : " + pp.getOwner() ));
 					}
-				});
+
+				}
+				catch(Exception e) {
+					layout2.addComponent(new Label("Find all students ERROR"));
+				}	
+			}
+		});
 				
-				
-				// find projects by ID student
-				
-				Button buttonFindProjectS = new Button("Find Projects by ID Student");
-				buttonFindProjectS.addClickListener(new Button.ClickListener() {
-					public void buttonClick(ClickEvent event) {
-						Student s = new Student();
-						try {
-							s = e_s.findStudentById(Integer.parseInt(idTextField.getValue()));
-							
-							List<Project> lproject = new ArrayList<Project>() ;
-							lproject=e_s.findProjects(s.getStudentID());
-							layout2.addComponent(new Label("Projects of student n° "+s.getStudentID()));
-							for (Project pp : lproject){
-								layout2.addComponent(new Label("\nID: " + pp.getProjectID() + "\n  | title: " + pp.getTitle() + "\n  | owner : " + pp.getOwner() ));
-							}
-							
-						}
-						catch(Exception e) {
-							layout2.addComponent(new Label("Find all students ERROR"));
-						}	
-					}
-				});
-				
-				
-				
+			
 				
 		layout2.addComponent((Component)idTextField);
 		layout2.addComponent(new Label(""));
@@ -211,12 +200,11 @@ public class Td_jpaUI extends UI {
 				
 		
 		
-		
-		// Layout 3
+		/* Implementation of Layout n°3 */
 		VerticalLayout layout3 = new VerticalLayout();
 		
 		
-		//Create a part for : Find all students 
+		// Find all students 
 		
 
 		Button buttonFindAllS = new Button("Find all Students");
@@ -241,6 +229,7 @@ public class Td_jpaUI extends UI {
 		});
 		
 		
+		// Find all projects
 		Button buttonFindAllP = new Button("Find all Projects");
 		buttonFindAllP.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -267,12 +256,12 @@ public class Td_jpaUI extends UI {
 	
 	
 	
-	// Layout 4
+	    /* Implementation of Layout n°4  */
 	
 			VerticalLayout layout4 = new VerticalLayout();
 			
 			
-			//Create a part for : Find a student by Id 
+			//Find a project by Id 
 			
 			Button buttonFindIdP = new Button("Find a Project by Id");
 			buttonFindIdP.addClickListener(new Button.ClickListener() {
@@ -291,43 +280,43 @@ public class Td_jpaUI extends UI {
 				}	
 			});	
 			
-			//Create a part for : Update a student 		
+			// Update a project 		
 					
-					Button buttonUpdateP = new Button("Update a Project");
-					buttonUpdateP.addClickListener(new Button.ClickListener() {
-						public void buttonClick(ClickEvent event) {
-						
-							try {
-								Project p = e_p.findProjectById(Integer.parseInt(idPTextField.getValue()));
-								p.setTitle(titlePTextField.getValue());
-								p.setOwner(Integer.parseInt(ownerPTextField.getValue()));
-								e_p.updateProject(p);
-								layout4.addComponent(new Label("A project has been updated"));
-							}
-							catch(Exception e) {
-								layout4.addComponent(new Label("Update ERROR"));
+			Button buttonUpdateP = new Button("Update a Project");
+			buttonUpdateP.addClickListener(new Button.ClickListener() {
+				public void buttonClick(ClickEvent event) {
 
-							}
-						}
-					});
-					
-					
-					
-					//Create a part for : Delete a student by Id
-					
-					Button buttonDeleteP = new Button("Delete a Project");
-					buttonDeleteP.addClickListener(new Button.ClickListener() {
-						public void buttonClick(ClickEvent event) {
-							try {
-								e_p.deleteProject(e_p.findProjectById(Integer.parseInt(idPTextField.getValue())));
-								layout4.addComponent(new Label("A project has been deleted"));
-							}
-							catch(Exception e) {
-								layout4.addComponent(new Label("Delete ERROR"));
-							}
-							
-						}
-					});
+					try {
+						Project p = e_p.findProjectById(Integer.parseInt(idPTextField.getValue()));
+						p.setTitle(titlePTextField.getValue());
+						p.setOwner(Integer.parseInt(ownerPTextField.getValue()));
+						e_p.updateProject(p);
+						layout4.addComponent(new Label("A project has been updated"));
+					}
+					catch(Exception e) {
+						layout4.addComponent(new Label("Update ERROR"));
+
+					}
+				}
+			});
+
+
+
+			// Delete a project by Id
+
+			Button buttonDeleteP = new Button("Delete a Project");
+			buttonDeleteP.addClickListener(new Button.ClickListener() {
+				public void buttonClick(ClickEvent event) {
+					try {
+						e_p.deleteProject(e_p.findProjectById(Integer.parseInt(idPTextField.getValue())));
+						layout4.addComponent(new Label("A project has been deleted"));
+					}
+					catch(Exception e) {
+						layout4.addComponent(new Label("Delete ERROR"));
+					}
+
+				}
+			});
 					
 					
 			layout4.addComponent((Component)idPTextField);
@@ -340,10 +329,10 @@ public class Td_jpaUI extends UI {
 			layoutH.addComponent(layout4);
 			layoutH.setComponentAlignment(layout4, Alignment.TOP_CENTER);
 	
-	// Layout 1
+			/* Implementation of Layout n°5 */ 
 	
 	
-			//Create a part for : Create a student 
+			// Create a project 
 			VerticalLayout layout5 = new VerticalLayout();		
 			Button buttonCreateP = new Button("Create a Project");
 			buttonCreateP.addClickListener(new Button.ClickListener() {
